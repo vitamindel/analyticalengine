@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Analytical Engine Emulator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #a5b4fc;
+            --secondary: #ec4899;
+            --secondary-light: #fbcfe8;
+            --dark: #18181b;
+            --light: #fafafa;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+            line-height: 1.6;
+            padding-bottom: 2rem;
+            font-weight: 400;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 3rem 0 8rem;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 4rem;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.8;
+        }
+        
+        .title-container {
+            position: relative;
+            z-index: 5;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--gray-800);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .main-content {
+            margin-top: -5rem;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .code-editor {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .editor-header {
+            background-color: #2a2a2a;
+            color: var(--gray-300);
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3a3a3a;
+        }
+        
+        .editor-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-300);
+            font-size: 0.85rem;
+        }
+        
+        .editor-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .editor-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .editor-button.red { background-color: #ff5f56; }
+        .editor-button.yellow { background-color: #ffbd2e; }
+        .editor-button.green { background-color: #27c93f; }
+        
+        textarea#commands {
+            width: 100%;
+            min-height: 220px;
+            padding: 1.25rem;
+            border: none;
+            resize: vertical;
+            background-color: #1e1e1e;
+            color: #f8f8f2;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            outline: none;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--gray-300);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border-radius: 8px;
+        }
+        
+        .file-input-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+        
+        .file-input-label:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            background-color: var(--gray-300);
+        }
+        
+        .file-input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .output-container {
+            background-color: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.25rem;
+            height: 220px;
+            overflow-y: auto;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        
+        .output-line {
+            margin-bottom: 0.5rem;
+            word-break: break-all;
+            padding-left: 0.5rem;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .output-line:hover {
+            border-left-color: var(--primary-light);
+            background-color: var(--gray-100);
+            border-radius: 4px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            background-color: var(--gray-100);
+            border-radius: 12px;
+            padding: 0.5rem;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.25rem;
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: var(--gray-200);
+        }
+        
+        .tab.active {
+            background-color: white;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .memory-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .memory-cell {
+            background: linear-gradient(135deg, var(--gray-50), white);
+            border-radius: 12px;
+            padding: 1.25rem 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+        }
+        
+        .memory-cell:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-light);
+        }
+        
+        .memory-cell-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+        
+        .memory-cell-value {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 1.5rem;
+            color: var(--gray-800);
+            font-weight: 500;
+        }
+        
+        .processing {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+            color: var(--primary);
+            font-weight: 500;
+            background-color: var(--primary-light);
+            background-opacity: 0.1;
+            padding: 0.75rem;
+            border-radius: 12px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        
+        .gear {
+            color: var(--primary);
+            animation: spin 3s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .help-section {
+            margin: 2rem 0;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .help-title {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--gray-800);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .command-table th, .command-table td {
+            text-align: left;
+            padding: 1rem 1.5rem;
+        }
+        
+        .command-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .command-table tr {
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .command-table tr:last-child {
+            border-bottom: none;
+        }
+        
+        .command-table tr:nth-child(even) {
+            background-color: var(--gray-50);
+        }
+        
+        .command-table tr:hover {
+            background-color: var(--gray-100);
+        }
+        
+        .example-code {
+            background-color: var(--gray-100);
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            line-height: 1.6;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .example-code::before {
+            content: 'Example';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.75rem;
+            border-bottom-left-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: white;
+            margin-left: 0.5rem;
+        }
+        
+        .badge-primary {
+            background-color: var(--primary);
+        }
+        
+        .badge-success {
+            background-color: var(--success);
+        }
+        
+        .badge-warning {
+            background-color: var(--warning);
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            border-radius: 8px;
+            padding: 0.75rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            font-weight: normal;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--dark) transparent transparent transparent;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .highlight {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--gray-200);
+            background-color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .memory-container {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2.25rem;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .tab {
+                justify-content: flex-start;
+            }
+        }
+
+        .punch-card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+        
+        .punch-card {
+            background-color: #f8e8c8;
+            border-radius: 8px;
+            padding: 1rem;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .punch-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .punch-card.active {
+            background-color: #ffe0b2;
+            border-left: 4px solid var(--success);
+        }
+        
+        .punch-card-number {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: var(--primary);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .punch-card-command {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-weight: 500;
+            color: var(--gray-800);
+        }
+        
+        .punch-holes {
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            gap: 0.25rem;
+            background-color: #e6d5b8;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .punch-hole {
+            width: 0.5rem;
+            height: 0.5rem;
+            border-radius: 50%;
+            background-color: #d4c3a3;
+            transition: all 0.2s ease;
+        }
+        
+        .punch-hole.punched {
+            background-color: #5d4037;
+            box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            color: var(--gray-500);
+            text-align: center;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--gray-400);
+        }
+        
+        .empty-state-text {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-state-subtext {
+            font-size: 0.9rem;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container title-container">
+            <h1 class="animate__animated animate__fadeInDown"><i class="fas fa-cogs"></i> Advanced Analytical Engine</h1>
+            <p class="subtitle animate__animated animate__fadeInUp">A modern emulation of Charles Babbage's revolutionary computational machine, reimagined for the digital age</p>
+        </div>
+    </header>
+    
+    <div class="container main-content">
+        <div class="card animate__animated animate__fadeInUp">
+            <div class="card-header">
+                <div class="header-title">
+                    <i class="fas fa-code"></i> Program Commands
+                    <span class="badge badge-primary">Compiler v1.2</span>
+                </div>
+                <div>
+                    <button id="toggleHelpBtn" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-question-circle"></i> Help Guide
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="code-editor">
+                    <div class="editor-header">
+                        <div class="editor-title">
+                            <i class="fas fa-file-code"></i> punch-card-commands.txt
+                        </div>
+                        <div class="editor-buttons">
+                            <span class="editor-button red"></span>
+                            <span class="editor-button yellow"></span>
+                            <span class="editor-button green"></span>
+                        </div>
+                    </div>
+                    <textarea id="commands" placeholder="// Enter your punch card commands here...
+
+LOAD A 10
+LOAD B 20
+ADD A B
+MULT A 2
+PRINT A
+
+// This program loads values into variables A and B,
+// adds B to A, multiplies A by 2, and prints the result."></textarea>
+                </div>
+                
+                <div class="controls">
+                    <button id="runBtn" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Run Program
+                    </button>
+                    <button id="stepBtn" class="btn btn-secondary">
+                        <i class="fas fa-step-forward"></i> Step-by-Step
+                    </button>
+                    <button id="resetBtn" class="btn btn-danger">
+                        <i class="fas fa-undo"></i> Reset Engine
+                    </button>
+                    <div class="file-input-container">
+                        <label class="file-input-label">
+                            <i class="fas fa-file-upload"></i> Load Program File
+                            <input type="file" id="loadFile" class="file-input">
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="processingIndicator" class="processing" style="display:none;">
+                    <i class="fas fa-cog fa-spin"></i> Processing Calculations...
+                </div>
+            </div>
+        </div>
+        
+        <div class="card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+            <div class="card-header">
+                <div class="header-title">
+                    <i class="fas fa-desktop"></i> Engine Status
+                </div>
+                <div class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltiptext">Monitor the execution of your program, view memory contents, execution logs, and punch cards.</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tabs">
+                    <div class="tab active" data-tab="output">
+                        <i class="fas fa-terminal"></i> Output Console
+                    </div>
+                    <div class="tab" data-tab="memory">
+                        <i class="fas fa-microchip"></i> Memory Storage
+                    </div>
+                    <div class="tab" data-tab="log">
+                        <i class="fas fa-clipboard-list"></i> Execution Log
+                    </div>
+                    <div class="tab" data-tab="punchcards">
+                        <i class="fas fa-ticket-alt"></i> Punch Cards
+                    </div>
+                </div>
+                
+                <div id="outputTab" class="tab-content active">
+                    <div id="output" class="output-container">
+                        <div class="output-line">System initialized. No program has been run yet.</div>
+                        <div class="output-line">Enter commands and click 'Run Program' to begin execution.</div>
+                    </div>
+                </div>
+                
+                <div id="memoryTab" class="tab-content">
+                    <div id="memoryVisual" class="memory-container">
+                        <div class="memory-cell">
+                            <div class="memory-cell-name">No Data</div>
+                            <div class="memory-cell-value">—</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="logTab" class="tab-content">
+                    <div id="log" class="output-container">
+                        <div class="output-line"><i class="fas fa-check-circle" style="color: var(--success);"></i> Analytical Engine initialized and ready.</div>
+                        <div class="output-line"><i class="fas fa-info-circle" style="color: var(--primary);"></i> Awaiting program input.</div>
+                    </div>
+                </div>
+                
+                <div id="punchcardsTab" class="tab-content">
+                    <div id="punchCardContainer" class="punch-card-container">
+                        <div class="empty-state">
+                            <i class="fas fa-ticket-alt"></i>
+                            <div class="empty-state-text">No Punch Cards Loaded</div>
+                            <div class="empty-state-subtext">Enter commands and run the program to generate punch cards.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="helpSection" class="help-section animate__animated animate__fadeIn" style="display:none;">
+            <h2 class="help-title"><i class="fas fa-book"></i> Command Reference Guide</h2>
+            <p>The Analytical Engine processes a simple set of commands to perform calculations. Each command is executed sequentially, similar to how punch cards were fed into early computing machines.</p>
+            
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Syntax</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="highlight">LOAD</span></td>
+                        <td>LOAD [var] [value]</td>
+                        <td>Initializes a variable with a specific value</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">ADD</span></td>
+                        <td>ADD [var] [value/var]</td>
+                        <td>Adds a value or another variable to the specified variable</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">SUB</span></td>
+                        <td>SUB [var] [value/var]</td>
+                        <td>Subtracts a value or another variable from the specified variable</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">MULT</span></td>
+                        <td>MULT [var] [value/var]</td>
+                        <td>Multiplies the specified variable by a value or another variable</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">DIV</span></td>
+                        <td>DIV [var] [value/var]</td>
+                        <td>Divides the specified variable by a value or another variable</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">PRINT</span></td>
+                        <td>PRINT [var]</td>
+                        <td>Outputs the current value of the specified variable</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">JUMP</span></td>
+                        <td>JUMP [line-number]</td>
+                        <td>Jumps to a specific line in the program</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">JUMPIF</span></td>
+                        <td>JUMPIF [var] [condition] [value] [line]</td>
+                        <td>Conditional jump if the comparison evaluates to true</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">STORE</span></td>
+                        <td>STORE [var] [address]</td>
+                        <td>Stores the variable value at a specific memory address</td>
+                    </tr>
+                    <tr>
+                        <td><span class="highlight">RECALL</span></td>
+                        <td>RECALL [var] [address]</td>
+                        <td>Retrieves a value from a memory address into a variable</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="example-code">
+                // Calculate factorial of 5
+                LOAD N 5
+                LOAD RESULT 1
+                LOAD I 1
+                
+                // Loop start
+                LABEL LOOP
+                MULT RESULT I
+                ADD I 1
+                JUMPIF I <= N LOOP
+                
+                PRINT RESULT
+                // Should output 120
+            </div>
+            
+            <h2><i class="fas fa-lightbulb"></i> Tips for Effective Programming</h2>
+            <ul>
+                <li>Use comments (lines starting with //) to document your program</li>
+                <li>Variable names are case-sensitive (A is different from a)</li>
+                <li>The engine executes one command at a time, from top to bottom</li>
+                <li>Use the Step-by-Step execution to understand complex program flow</li>
+                <li>Check the Memory Storage tab to observe how variables change</li>
+            </ul>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>Advanced Analytical Engine Emulator © 2025 | Inspired by Charles Babbage's revolutionary designs</p>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId + 'Tab').classList.add('active');
+                });
+            });
+            
+            // Toggle help section
+            const toggleHelpBtn = document.getElementById('toggleHelpBtn');
+            const helpSection = document.getElementById('helpSection');
+            toggleHelpBtn.addEventListener('click', function() {
+                if (helpSection.style.display === 'none') {
+                    helpSection.style.display = 'block';
+                    toggleHelpBtn.innerHTML = '<i class="fas fa-times-circle"></i> Close Help';
+                } else {
+                    helpSection.style.display = 'none';
+                    toggleHelpBtn.innerHTML = '<i class="fas fa-question-circle"></i> Help Guide';
+                }
+            });
+            
+            // Simple memory state
+            const memory = {};
+            let executionLog = [];
+            let punchCards = [];
+            
+            // UI elements
+            const runBtn = document.getElementById('runBtn');
+            const output = document.getElementById('output');
+            const log = document.getElementById('log');
+            const memoryVisual = document.getElementById('memoryVisual');
+            const punchCardContainer = document.getElementById('punchCardContainer');
+            const processingIndicator = document.getElementById('processingIndicator');
+            
+            // Run program button
+            runBtn.addEventListener('click', function() {
+                output.innerHTML = '';
+                executionLog = [];
+                punchCards = [];
+                updateLog('<i class="fas fa-play-circle" style="color: var(--success);"></i> Program execution started.');
+                updatePunchCards('Program execution started.');
+                
+                const commandsText = document.getElementById('commands').value;
+                const commands = commandsText.split('\n')
+                    .filter(line => line.trim() !== '' && !line.trim().startsWith('//'))
+                    .map((cmd, index) => ({ line: index + 1, text: cmd.trim() }));
+                
+                processingIndicator.style.display = 'flex';
+                
+                setTimeout(() => {
+                    try {
+                        generatePunchCards(commands);
+                        for(let i = 0; i < commands.length; i++) {
+                            const result = executeCommand(commands[i].text, i);
+                            if (result && result.startsWith('OUTPUT:')) {
+                                updateOutput(result.substring(7));
+                            }
+                        }
+                        updateLog('<i class="fas fa-check-circle" style="color: var(--success);"></i> Program execution completed successfully.');
+                        updatePunchCards('Program execution completed successfully.');
+                    } catch (error) {
+                        updateOutput(`Error: ${error.message}`);
+                        updateLog(`<i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i> Execution error: ${error.message}`);
+                        updatePunchCards(`Execution error: ${error.message}`, true);
+                    }
+                    
+                    updateMemoryDisplay();
+                    processingIndicator.style.display = 'none';
+                }, 800);
+            });
+            
+            // Reset button
+            const resetBtn = document.getElementById('resetBtn');
+            resetBtn.addEventListener('click', function() {
+                for (const key in memory) {
+                    delete memory[key];
+                }
+                executionLog = [];
+                punchCards = [];
+                output.innerHTML = '<div class="output-line">System reset. Memory cleared.</div>';
+                updateLog('<i class="fas fa-trash-alt" style="color: var(--warning);"></i> Engine reset. All memory cleared.');
+                updatePunchCards('Engine reset. All memory cleared.');
+                updateMemoryDisplay();
+            });
+            
+            // Command execution function
+            function executeCommand(command, index) {
+                command = command.trim();
+                const parts = command.split(' ').filter(p => p !== '');
+                if (parts.length === 0) return;
+                
+                const cmd = parts[0].toUpperCase();
+                highlightPunchCard(index);
+                
+                switch(cmd) {
+                    case 'LOAD':
+                        if (parts.length !== 3) throw new Error(`Invalid LOAD command: ${command}`);
+                        const varName = parts[1];
+                        const value = isNaN(parts[2]) ? memory[parts[2]] : parseFloat(parts[2]);
+                        memory[varName] = value;
+                        updateLog(`Loaded ${value} into ${varName}`);
+                        updatePunchCards(`Loaded ${value} into ${varName}`);
+                        break;
+                        
+                    case 'ADD':
+                        if (parts.length !== 3) throw new Error(`Invalid ADD command: ${command}`);
+                        const addTarget = parts[1];
+                        const addValue = isNaN(parts[2]) ? memory[parts[2]] : parseFloat(parts[2]);
+                        if (memory[addTarget] === undefined) throw new Error(`Variable ${addTarget} not initialized`);
+                        memory[addTarget] += addValue;
+                        updateLog(`Added ${addValue} to ${addTarget}. New value: ${memory[addTarget]}`);
+                        updatePunchCards(`Added ${addValue} to ${addTarget}. New value: ${memory[addTarget]}`);
+                        break;
+                        
+                    case 'SUB':
+                        if (parts.length !== 3) throw new Error(`Invalid SUB command: ${command}`);
+                        const subTarget = parts[1];
+                        const subValue = isNaN(parts[2]) ? memory[parts[2]] : parseFloat(parts[2]);
+                        if (memory[subTarget] === undefined) throw new Error(`Variable ${subTarget} not initialized`);
+                        memory[subTarget] -= subValue;
+                        updateLog(`Subtracted ${subValue} from ${subTarget}. New value: ${memory[subTarget]}`);
+                        updatePunchCards(`Subtracted ${subValue} from ${subTarget}. New value: ${memory[subTarget]}`);
+                        break;
+                        
+                    case 'MULT':
+                        if (parts.length !== 3) throw new Error(`Invalid MULT command: ${command}`);
+                        const multTarget = parts[1];
+                        const multValue = isNaN(parts[2]) ? memory[parts[2]] : parseFloat(parts[2]);
+                        if (memory[multTarget] === undefined) throw new Error(`Variable ${multTarget} not initialized`);
+                        memory[multTarget] *= multValue;
+                        updateLog(`Multiplied ${multTarget} by ${multValue}. New value: ${memory[multTarget]}`);
+                        updatePunchCards(`Multiplied ${multTarget} by ${multValue}. New value: ${memory[multTarget]}`);
+                        break;
+                        
+                    case 'DIV':
+                        if (parts.length !== 3) throw new Error(`Invalid DIV command: ${command}`);
+                        const divTarget = parts[1];
+                        const divValue = isNaN(parts[2]) ? memory[parts[2]] : parseFloat(parts[2]);
+                        if (memory[divTarget] === undefined) throw new Error(`Variable ${divTarget} not initialized`);
+                        if (divValue === 0) throw new Error(`Division by zero error`);
+                        memory[divTarget] /= divValue;
+                        updateLog(`Divided ${divTarget} by ${divValue}. New value: ${memory[divTarget]}`);
+                        updatePunchCards(`Divided ${divTarget} by ${divValue}. New value: ${memory[divTarget]}`);
+                        break;
+                        
+                    case 'PRINT':
+                        if (parts.length !== 2) throw new Error(`Invalid PRINT command: ${command}`);
+                        const printVar = parts[1];
+                        if (memory[printVar] === undefined) throw new Error(`Variable ${printVar} not initialized`);
+                        updateLog(`Printed value of ${printVar}: ${memory[printVar]}`);
+                        updatePunchCards(`Printed value of ${printVar}: ${memory[printVar]}`);
+                        return `OUTPUT: Value of ${printVar} is ${memory[printVar]}`;
+                        
+                    default:
+                        throw new Error(`Unknown command: ${cmd}`);
+                }
+            }
+            
+            // Generate punch cards
+            function generatePunchCards(commands) {
+                punchCards = commands.map((cmd, index) => ({
+                    line: cmd.line,
+                    text: cmd.text,
+                    holes: generatePunchHoles(cmd.text)
+                }));
+                renderPunchCards();
+            }
+            
+            // Generate simulated punch holes (simple hash-based pattern)
+            function generatePunchHoles(command) {
+                const holes = Array(20).fill(false);
+                let hash = 0;
+                for (let i = 0; i < command.length; i++) {
+                    hash += command.charCodeAt(i);
+                }
+                for (let i = 0; i < 10; i++) {
+                    holes[(hash + i) % 20] = true; // Punch 10 holes based on command text
+                }
+                return holes;
+            }
+            
+            // Render punch cards
+            function renderPunchCards() {
+                punchCardContainer.innerHTML = '';
+                if (punchCards.length === 0) {
+                    punchCardContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-ticket-alt"></i>
+                            <div class="empty-state-text">No Punch Cards Loaded</div>
+                            <div class="empty-state-subtext">Enter commands and run the program to generate punch cards.</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                punchCards.forEach((card, index) => {
+                    const cardElement = document.createElement('div');
+                    cardElement.className = 'punch-card';
+                    cardElement.dataset.index = index;
+                    cardElement.innerHTML = `
+                        <div class="punch-card-number">${card.line}</div>
+                        <div class="punch-card-command">${card.text}</div>
+                        <div class="punch-holes">
+                            ${card.holes.map(hole => `<span class="punch-hole${hole ? ' punched' : ''}"></span>`).join('')}
+                        </div>
+                    `;
+                    punchCardContainer.appendChild(cardElement);
+                });
+                punchCardContainer.scrollTop = punchCardContainer.scrollHeight;
+            }
+            
+            // Highlight active punch card
+            function highlightPunchCard(index) {
+                const cards = punchCardContainer.querySelectorAll('.punch-card');
+                cards.forEach(card => card.classList.remove('active'));
+                if (cards[index]) cards[index].classList.add('active');
+            }
+            
+            // Update punch card log with messages
+            function updatePunchCards(message, isError = false) {
+                renderPunchCards();
+                const statusCard = document.createElement('div');
+                statusCard.className = 'punch-card';
+                statusCard.innerHTML = `
+                    <div class="punch-card-command">
+                        <i class="${isError ? 'fas fa-exclamation-triangle' : 'fas fa-info-circle'}" 
+                           style="color: ${isError ? 'var(--danger)' : 'var(--success)'}"></i> ${message}
+                    </div>
+                `;
+                punchCardContainer.appendChild(statusCard);
+                punchCardContainer.scrollTop = punchCardContainer.scrollHeight;
+            }
+            
+            // Update output display
+            function updateOutput(text) {
+                const line = document.createElement('div');
+                line.className = 'output-line';
+                line.innerHTML = text;
+                output.appendChild(line);
+                output.scrollTop = output.scrollHeight;
+            }
+            
+            // Update log display
+            function updateLog(text) {
+                executionLog.push(text);
+                const line = document.createElement('div');
+                line.className = 'output-line';
+                line.innerHTML = text;
+                log.appendChild(line);
+                log.scrollTop = log.scrollHeight;
+            }
+            
+            // Update memory display
+            function updateMemoryDisplay() {
+                memoryVisual.innerHTML = '';
+                if (Object.keys(memory).length === 0) {
+                    memoryVisual.innerHTML = `
+                        <div class="memory-cell">
+                            <div class="memory-cell-name">No Data</div>
+                            <div class="memory-cell-value">—</div>
+                        </div>
+                    `;
+                    return;
+                }
+                for (const key in memory) {
+                    const cell = document.createElement('div');
+                    cell.className = 'memory-cell';
+                    cell.innerHTML = `
+                        <div class="memory-cell-name">${key}</div>
+                        <div class="memory-cell-value">${memory[key]}</div>
+                    `;
+                    memoryVisual.appendChild(cell);
+                }
+            }
+            
+            // File loading functionality
+            const fileInput = document.getElementById('loadFile');
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('commands').value = e.target.result;
+                    updateLog(`<i class="fas fa-file-import" style="color: var(--primary);"></i> Program loaded from file: ${file.name}`);
+                    updatePunchCards(`Program loaded from file: ${file.name}`);
+                };
+                reader.readAsText(file);
+            });
+        });
+    </script>
+</body>
+</html>
